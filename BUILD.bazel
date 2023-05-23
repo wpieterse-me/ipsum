@@ -1,11 +1,4 @@
 cc_binary(
-    name = "main",
-    srcs = [
-        "main.c",
-    ],
-)
-
-cc_binary(
     name = "bench",
     srcs = [
         "bench.cpp",
