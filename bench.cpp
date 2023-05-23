@@ -62,3 +62,21 @@ BENCHMARK(DemoSimple, AVX2, 10, 1000000)
 }
 
 #endif
+
+#if defined(__AVX512F__)
+
+int32_t GetPaletteIndex_AVX512(Color color)
+{
+    const __m512i vec = _mm512_set1_epi32((uint32_t)color);
+    const __m512i lookup = _mm512_setr_epi32((uint32_t)Color::Red, (uint32_t)Color::Green, (uint32_t)Color::Blue, (uint32_t)Color::White, (uint32_t)Color::Gray, (uint32_t)Color::Black, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1);
+    const __mmask16 mask = _mm512_cmpeq_epi32_mask(vec, lookup);
+    const uint32_t mask_b = mask | 0x40;
+    return __builtin_ctz(mask_b);
+}
+
+BENCHMARK(DemoSimple, AVX512, 10, 1000000)
+{
+    celero::DoNotOptimizeAway(GetPaletteIndex_AVX512(Color::Blue));
+}
+
+#endif
