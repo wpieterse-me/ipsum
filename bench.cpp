@@ -1,8 +1,64 @@
 #include "celero/Celero.h"
 
+#if defined(__AVX2__)
+#include <immintrin.h>
+#endif
+
 CELERO_MAIN
+
+enum class Color : uint32_t
+{
+    Red = 0x00ff0000,
+    Green = 0x0000ff00,
+    Blue = 0x000000ff,
+    White = 0x00ffffff,
+    Gray = 0x00333333,
+    Black = 0x00000000,
+};
+
+uint32_t GetPaletteIndex(Color color)
+{
+    switch (color)
+    {
+    case Color::Red:
+        return 0;
+    case Color::Green:
+        return 1;
+    case Color::Blue:
+        return 2;
+    case Color::White:
+        return 3;
+    case Color::Gray:
+        return 4;
+    case Color::Black:
+        return 5;
+    }
+
+    return 6;
+}
 
 BASELINE(DemoSimple, Baseline, 10, 1000000)
 {
-    celero::DoNotOptimizeAway(1);
+    celero::DoNotOptimizeAway(GetPaletteIndex(Color::Blue));
 }
+
+#if defined(__AVX2__)
+
+uint32_t GetPaletteIndex_AVX2(Color color)
+{
+    const __m256i vec = _mm256_set1_epi32((uint32_t)color);
+    const __m256i lookup = _mm256_setr_epi32((uint32_t)Color::Red, (uint32_t)Color::Green, (uint32_t)Color::Blue, (uint32_t)Color::White, (uint32_t)Color::Gray, (uint32_t)Color::Black, -1, -1);
+    const __m256i mask = _mm256_cmpeq_epi32(vec, lookup);
+    uint32_t bitmask = _mm256_movemask_ps((__m256)mask);
+    bitmask = bitmask | 0x40;
+    const int index = __builtin_ctz(bitmask);
+
+    return index;
+}
+
+BENCHMARK(DemoSimple, AVX2, 10, 1000000)
+{
+    celero::DoNotOptimizeAway(GetPaletteIndex_AVX2(Color::Blue));
+}
+
+#endif
