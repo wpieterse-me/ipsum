@@ -1,7 +1,7 @@
 #!/bin/bash
 
-export CONFIGURATION=$1
-export BINARY_DIRECTORY=$(pwd)/build/${CONFIGURATION}
+CONFIGURATION=$1
+BINARY_DIRECTORY=$(pwd)/build/${CONFIGURATION}
 
 clear
 
@@ -16,8 +16,3 @@ echo "* BUILD *"
 echo "*********"
 cmake --build --preset ${CONFIGURATION}
 echo ""
-
-echo "*******"
-echo "* RUN *"
-echo "*******"
-${BINARY_DIRECTORY}/bench
