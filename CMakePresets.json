@@ -18,6 +18,18 @@
             }
         },
         {
+            "name": "arm_sve_debug",
+            "displayName": "ARM - SVE - Debug",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "generator": "Ninja",
+            "toolchainFile": "cmake/toolchains/aarch64.cmake",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "CMAKE_CXX_FLAGS_INIT": "-march=armv8-a+sve"
+            }
+        },
+        {
             "name": "x86_general_debug",
             "displayName": "x86 - General - Debug",
             "binaryDir": "${sourceDir}/build/${presetName}",
@@ -54,6 +66,10 @@
         {
             "name": "arm_general_debug",
             "configurePreset": "arm_general_debug"
+        },
+        {
+            "name": "arm_sve_debug",
+            "configurePreset": "arm_sve_debug"
         },
         {
             "name": "x86_general_debug",
