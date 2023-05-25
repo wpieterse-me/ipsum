@@ -4,3 +4,5 @@ bazel-out
 bazel-testlogs
 
 user.bazelrc
+
+build
