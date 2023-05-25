@@ -4,6 +4,10 @@
 #include <immintrin.h>
 #endif
 
+#if defined(__ARM_NEON) || defined(__ARM_NEON__)
+#include <arm_neon.h>
+#endif
+
 #if defined(__ARM_FEATURE_SVE)
 #include <arm_sve.h>
 #endif
@@ -45,6 +49,22 @@ BASELINE(DemoSimple, Baseline, 10, 1000000)
 {
     celero::DoNotOptimizeAway(GetPaletteIndex(Color::Blue));
 }
+
+#if defined(__ARM_NEON)
+
+uint32_t GetPaletteIndex_NEON(Color color)
+{
+    auto v = vcreate_u8(0x0102030405060708);
+
+    return vget_lane_u8(v, 0);
+}
+
+BENCHMARK(DemoSimple, NEON, 10, 1000000)
+{
+    celero::DoNotOptimizeAway(GetPaletteIndex_NEON(Color::Blue));
+}
+
+#endif
 
 #if defined(__ARM_FEATURE_SVE)
 
