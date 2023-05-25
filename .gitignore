@@ -1,8 +1,8 @@
-bazel-bin
-bazel-ipsum
-bazel-out
-bazel-testlogs
+/bazel-bin
+/bazel-ipsum
+/bazel-out
+/bazel-testlogs
 
-user.bazelrc
+/user.bazelrc
 
-build
+/build
