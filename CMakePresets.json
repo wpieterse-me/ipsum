@@ -1,11 +1,22 @@
 {
-    "version": 2,
+    "version": 3,
     "cmakeMinimumRequired": {
         "major": 3,
         "minor": 26,
         "patch": 0
     },
     "configurePresets": [
+        {
+            "name": "arm_general_debug",
+            "displayName": "ARM - General - Debug",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "generator": "Ninja",
+            "toolchainFile": "cmake/toolchains/aarch64.cmake",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        },
         {
             "name": "x86_general_debug",
             "displayName": "x86 - General - Debug",
@@ -29,6 +40,10 @@
         }
     ],
     "buildPresets": [
+        {
+            "name": "arm_general_debug",
+            "configurePreset": "arm_general_debug"
+        },
         {
             "name": "x86_general_debug",
             "configurePreset": "x86_general_debug"
