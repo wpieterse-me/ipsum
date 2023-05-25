@@ -1,8 +1,1 @@
-/bazel-bin
-/bazel-ipsum
-/bazel-out
-/bazel-testlogs
-
-/user.bazelrc
-
 /build

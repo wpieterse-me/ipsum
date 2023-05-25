@@ -1,9 +1,0 @@
-cc_binary(
-    name = "bench",
-    srcs = [
-        "bench.cpp",
-    ],
-    deps = [
-        "@celero//:export",
-    ],
-)
