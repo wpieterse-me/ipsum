@@ -1,6 +1,6 @@
 #include "celero/Celero.h"
 
-#if defined(__AVX2__)
+#if defined(__AVX2__) || defined(__AVX512F__)
 #include <immintrin.h>
 #endif
 
