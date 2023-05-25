@@ -45,7 +45,29 @@ uint32_t GetPaletteIndex(Color color)
     return 6;
 }
 
-BASELINE(DemoSimple, Baseline, 10, 1000000)
+class DemoSimpleFixture : public celero::TestFixture
+{
+public:
+    virtual std::vector<celero::TestFixture::ExperimentValue> getExperimentValues() const override
+    {
+        std::vector<celero::TestFixture::ExperimentValue> result;
+
+        result.push_back({(int64_t)Color::Red});
+        result.push_back({(int64_t)Color::Black});
+
+        return result;
+    }
+
+    virtual void setUp(const celero::TestFixture::ExperimentValue &experiment_value)
+    {
+        this->color = (Color)experiment_value.Value;
+    }
+
+private:
+    Color color;
+};
+
+BASELINE_F(DemoSimple, Baseline, DemoSimpleFixture, 10, 1000000)
 {
     celero::DoNotOptimizeAway(GetPaletteIndex(Color::Blue));
 }
@@ -59,7 +81,7 @@ uint32_t GetPaletteIndex_NEON(Color color)
     return vget_lane_u8(v, 0);
 }
 
-BENCHMARK(DemoSimple, NEON, 10, 1000000)
+BENCHMARK_F(DemoSimple, NEON, DemoSimpleFixture, 10, 1000000)
 {
     celero::DoNotOptimizeAway(GetPaletteIndex_NEON(Color::Blue));
 }
@@ -73,7 +95,7 @@ uint32_t GetPaletteIndex_SVE(Color color)
     return svcntd();
 }
 
-BENCHMARK(DemoSimple, SVE, 10, 1000000)
+BENCHMARK_F(DemoSimple, SVE, DemoSimpleFixture, 10, 1000000)
 {
     celero::DoNotOptimizeAway(GetPaletteIndex_SVE(Color::Blue));
 }
@@ -94,7 +116,7 @@ uint32_t GetPaletteIndex_AVX2(Color color)
     return index;
 }
 
-BENCHMARK(DemoSimple, AVX2, 10, 1000000)
+BENCHMARK_F(DemoSimple, AVX2, DemoSimpleFixture, 10, 1000000)
 {
     celero::DoNotOptimizeAway(GetPaletteIndex_AVX2(Color::Blue));
 }
@@ -112,7 +134,7 @@ int32_t GetPaletteIndex_AVX512(Color color)
     return __builtin_ctz(mask_b);
 }
 
-BENCHMARK(DemoSimple, AVX512, 10, 1000000)
+BENCHMARK_F(DemoSimple, AVX512, DemoSimpleFixture, 10, 1000000)
 {
     celero::DoNotOptimizeAway(GetPaletteIndex_AVX512(Color::Blue));
 }
