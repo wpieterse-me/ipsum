@@ -1,10 +1,20 @@
 {
     "configurations": [
         {
-            "name": "Linux",
+            "name": "Linux - x86 - General",
             "includePath": [
-                "${workspaceFolder}/*",
-                "${workspaceFolder}/bazel-ipsum/external/celero/include/*"
+                "${workspaceFolder}/**"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang-16",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-clang-x64"
+        },
+        {
+            "name": "Linux - x86 - AVX2",
+            "includePath": [
+                "${workspaceFolder}/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang-16",
@@ -13,6 +23,20 @@
             "intelliSenseMode": "linux-clang-x64",
             "compilerArgs": [
                 "-mavx2"
+            ]
+        },
+        {
+            "name": "Linux - x86 - AVX512",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang-16",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-clang-x64",
+            "compilerArgs": [
+                "-mavx512f"
             ]
         }
     ],
