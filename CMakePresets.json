@@ -15,12 +15,27 @@
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
             }
+        },
+        {
+            "name": "x86_avx512_debug",
+            "displayName": "x86 - AVX512 - Debug",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "CMAKE_CXX_FLAGS_INIT": "-mavx512f"
+            }
         }
     ],
     "buildPresets": [
         {
             "name": "x86_general_debug",
             "configurePreset": "x86_general_debug"
+        },
+        {
+            "name": "x86_avx512_debug",
+            "configurePreset": "x86_avx512_debug"
         }
     ]
 }
