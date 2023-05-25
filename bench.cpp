@@ -4,6 +4,10 @@
 #include <immintrin.h>
 #endif
 
+#if defined(__ARM_FEATURE_SVE)
+#include <arm_sve.h>
+#endif
+
 CELERO_MAIN
 
 enum class Color : uint32_t
@@ -41,6 +45,20 @@ BASELINE(DemoSimple, Baseline, 10, 1000000)
 {
     celero::DoNotOptimizeAway(GetPaletteIndex(Color::Blue));
 }
+
+#if defined(__ARM_FEATURE_SVE)
+
+uint32_t GetPaletteIndex_SVE(Color color)
+{
+    return svcntd();
+}
+
+BENCHMARK(DemoSimple, SVE, 10, 1000000)
+{
+    celero::DoNotOptimizeAway(GetPaletteIndex_SVE(Color::Blue));
+}
+
+#endif
 
 #if defined(__AVX2__)
 
