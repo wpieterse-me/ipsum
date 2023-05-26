@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONFIGURATION=arm_general_debug
+CONFIGURATION=arm_sve_release
 
 ./build.sh ${CONFIGURATION}
 

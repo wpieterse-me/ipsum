@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONFIGURATION=x86_avx512_debug
+CONFIGURATION=x86_avx2_release
 
 ./build.sh ${CONFIGURATION}
 

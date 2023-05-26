@@ -7,56 +7,56 @@
     },
     "configurePresets": [
         {
-            "name": "arm_general_debug",
-            "displayName": "ARM - General - Debug",
+            "name": "arm_general_release",
+            "displayName": "ARM - General - Release",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "generator": "Ninja",
             "toolchainFile": "cmake/toolchains/aarch64.cmake",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
             }
         },
         {
-            "name": "arm_sve_debug",
-            "displayName": "ARM - SVE - Debug",
+            "name": "arm_sve_release",
+            "displayName": "ARM - SVE - Release",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "generator": "Ninja",
             "toolchainFile": "cmake/toolchains/aarch64.cmake",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "CMAKE_CXX_FLAGS_INIT": "-march=armv8-a+sve"
             }
         },
         {
-            "name": "x86_general_debug",
-            "displayName": "x86 - General - Debug",
+            "name": "x86_general_release",
+            "displayName": "x86 - General - Release",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "generator": "Ninja",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
             }
         },
         {
-            "name": "x86_avx2_debug",
-            "displayName": "x86 - AVX2 - Debug",
+            "name": "x86_avx2_release",
+            "displayName": "x86 - AVX2 - Release",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "generator": "Ninja",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "CMAKE_CXX_FLAGS_INIT": "-mavx2"
             }
         },
         {
-            "name": "x86_avx512_debug",
-            "displayName": "x86 - AVX512 - Debug",
+            "name": "x86_avx512_release",
+            "displayName": "x86 - AVX512 - Release",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "generator": "Ninja",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "CMAKE_CXX_FLAGS_INIT": "-mavx512f"
             }
@@ -64,24 +64,24 @@
     ],
     "buildPresets": [
         {
-            "name": "arm_general_debug",
-            "configurePreset": "arm_general_debug"
+            "name": "arm_general_release",
+            "configurePreset": "arm_general_release"
         },
         {
-            "name": "arm_sve_debug",
-            "configurePreset": "arm_sve_debug"
+            "name": "arm_sve_release",
+            "configurePreset": "arm_sve_release"
         },
         {
-            "name": "x86_general_debug",
-            "configurePreset": "x86_general_debug"
+            "name": "x86_general_release",
+            "configurePreset": "x86_general_release"
         },
         {
-            "name": "x86_avx2_debug",
-            "configurePreset": "x86_avx2_debug"
+            "name": "x86_avx2_release",
+            "configurePreset": "x86_avx2_release"
         },
         {
-            "name": "x86_avx512_debug",
-            "configurePreset": "x86_avx512_debug"
+            "name": "x86_avx512_release",
+            "configurePreset": "x86_avx512_release"
         }
     ]
 }
