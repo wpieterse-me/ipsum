@@ -38,29 +38,36 @@ void write_framebuffer(const char *filename, const uint32_t *image, const int32_
     ofs.close();
 }
 
+void clear_image(uint32_t *image, int32_t image_width, int32_t image_height)
+{
+    for (int32_t index_y = 0; index_y < image_height; index_y++)
+    {
+        for (int32_t index_x = 0; index_x < image_width; index_x++)
+        {
+            image[index_x + index_y * image_width] = pack_color(0, 0, 0);
+        }
+    }
+}
+
 int32_t main(int32_t argument_count, char **arguments)
 {
     static constexpr int32_t IMAGE_WIDTH = 2048;
     static constexpr int32_t IMAGE_HEIGHT = 2048;
-
-    uint32_t *image = new uint32_t[IMAGE_WIDTH * IMAGE_HEIGHT];
-
-    for (int32_t index_y = 0; index_y < IMAGE_HEIGHT; index_y++)
-    {
-        for (int32_t index_x = 0; index_x < IMAGE_WIDTH; index_x++)
-        {
-            image[index_x + index_y * IMAGE_WIDTH] = pack_color(0, 0, 0);
-        }
-    }
 
     point2d_t v0{IMAGE_WIDTH, IMAGE_HEIGHT};
     point2d_t v1{0, IMAGE_HEIGHT};
     point2d_t v2{0, 0};
     uint32_t color = pack_color(255, 0, 0);
 
-    draw_triangle(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
+    uint32_t *image = new uint32_t[IMAGE_WIDTH * IMAGE_HEIGHT];
 
-    write_framebuffer("out.ppm", image, IMAGE_WIDTH, IMAGE_HEIGHT);
+    clear_image(image, IMAGE_WIDTH, IMAGE_HEIGHT);
+    draw_triangle_general(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
+    write_framebuffer("out_general.ppm", image, IMAGE_WIDTH, IMAGE_HEIGHT);
+
+    clear_image(image, IMAGE_WIDTH, IMAGE_HEIGHT);
+    draw_triangle_optimized_1(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
+    write_framebuffer("out_optimized_1.ppm", image, IMAGE_WIDTH, IMAGE_HEIGHT);
 
     return 0;
 }
