@@ -1,7 +1,4 @@
-*.pftrace
-*.ppm
-
-bazel-bin
-bazel-ipsum
-bazel-out
-bazel-testlogs
+/bazel-bin
+/bazel-ipsum
+/bazel-out
+/bazel-testlogs
