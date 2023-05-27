@@ -1,6 +1,8 @@
 #include <cstdint>
 #include <fstream>
 
+#include "triangle.h"
+
 uint32_t pack_color(const uint8_t red, const uint8_t green, const uint8_t blue, const uint8_t alpha = 255)
 {
     return (alpha << 24) + (blue << 16) + (green << 8) + red;
@@ -38,23 +40,27 @@ void write_framebuffer(const char *filename, const uint32_t *image, const int32_
 
 int32_t main(int32_t argument_count, char **arguments)
 {
-    static constexpr int32_t FRAMEBUFFER_WIDTH = 512;
-    static constexpr int32_t FRAMEBUFFER_HEIGHT = 512;
+    static constexpr int32_t IMAGE_WIDTH = 2048;
+    static constexpr int32_t IMAGE_HEIGHT = 2048;
 
-    uint32_t *framebuffer = new uint32_t[FRAMEBUFFER_WIDTH * FRAMEBUFFER_HEIGHT];
+    uint32_t *image = new uint32_t[IMAGE_WIDTH * IMAGE_HEIGHT];
 
-    for (int32_t index_y = 0; index_y < FRAMEBUFFER_HEIGHT; index_y++)
+    for (int32_t index_y = 0; index_y < IMAGE_HEIGHT; index_y++)
     {
-        for (int32_t index_x = 0; index_x < FRAMEBUFFER_WIDTH; index_x++)
+        for (int32_t index_x = 0; index_x < IMAGE_WIDTH; index_x++)
         {
-            uint8_t red = 255 * index_y / FRAMEBUFFER_HEIGHT;
-            uint8_t green = 255 * index_x / FRAMEBUFFER_WIDTH;
-
-            framebuffer[index_x + index_y * FRAMEBUFFER_WIDTH] = pack_color(red, green, 0);
+            image[index_x + index_y * IMAGE_WIDTH] = pack_color(0, 0, 0);
         }
     }
 
-    write_framebuffer("out.ppm", framebuffer, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
+    point2d_t v0{IMAGE_WIDTH, IMAGE_HEIGHT};
+    point2d_t v1{0, IMAGE_HEIGHT};
+    point2d_t v2{0, 0};
+    uint32_t color = pack_color(255, 0, 0);
+
+    draw_triangle(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
+
+    write_framebuffer("out.ppm", image, IMAGE_WIDTH, IMAGE_HEIGHT);
 
     return 0;
 }
