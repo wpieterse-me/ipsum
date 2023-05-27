@@ -63,3 +63,10 @@ add_executable(
     raycaster
     raycaster.cpp
 )
+
+target_link_libraries(
+    raycaster
+    PRIVATE
+        ${CMAKE_THREAD_LIBS_INIT}
+        perfetto
+)
