@@ -1,1 +1,3 @@
+build --copt='-march=native'
+
 build --cxxopt='--std=c++20'

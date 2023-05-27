@@ -1,3 +1,18 @@
 workspace(
     name = "com_github_wpieterse-me_ipsum",
 )
+
+load(
+    "@bazel_tools//tools/build_defs/repo:http.bzl",
+    "http_archive",
+)
+
+http_archive(
+    name = "com_github_DigitalInBlue_Celero",
+    build_file = "//:celero.BUILD",
+    sha256 = "a3bfaddc52940b561d84cdfcf58c236f8047dfcacba99bbba5c1c2a33c686bae",
+    strip_prefix = "Celero-6646a8f40c021b03df7d7b4465e44ba4c8638ecb",
+    urls = [
+        "https://github.com/DigitalInBlue/Celero/archive/6646a8f40c021b03df7d7b4465e44ba4c8638ecb.zip",
+    ],
+)

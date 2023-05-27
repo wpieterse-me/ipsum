@@ -9,6 +9,17 @@ cc_library(
 )
 
 cc_binary(
+    name = "bench",
+    srcs = [
+        "bench.cpp",
+    ],
+    deps = [
+        ":perfetto",
+        "@com_github_DigitalInBlue_Celero//:export",
+    ],
+)
+
+cc_binary(
     name = "raycaster",
     srcs = [
         "raycaster.cpp",
