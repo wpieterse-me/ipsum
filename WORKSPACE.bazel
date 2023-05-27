@@ -9,7 +9,7 @@ load(
 
 http_archive(
     name = "celero",
-    build_file = "//:celero.BUILD",
+    build_file = "//third_party:celero.BUILD",
     sha256 = "a3bfaddc52940b561d84cdfcf58c236f8047dfcacba99bbba5c1c2a33c686bae",
     strip_prefix = "Celero-6646a8f40c021b03df7d7b4465e44ba4c8638ecb",
     urls = [

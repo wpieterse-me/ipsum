@@ -6,7 +6,7 @@
 #include <iomanip>
 #include <iostream>
 
-#include "perfetto.h"
+#include "third_party/perfetto/perfetto.h"
 
 PERFETTO_DEFINE_CATEGORIES(perfetto::Category("rendering").SetDescription("Events from the graphics subsystem"));
 

@@ -1,13 +1,3 @@
-cc_library(
-    name = "perfetto",
-    srcs = [
-        "perfetto.cc",
-    ],
-    hdrs = [
-        "perfetto.h",
-    ],
-)
-
 cc_binary(
     name = "bench",
     srcs = [
@@ -24,6 +14,6 @@ cc_binary(
         "raycaster.cpp",
     ],
     deps = [
-        ":perfetto",
+        "//third_party/perfetto",
     ],
 )
