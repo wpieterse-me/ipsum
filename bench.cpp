@@ -1,5 +1,3 @@
-#include "celero/Celero.h"
-
 #if defined(__AVX2__) || defined(__AVX512F__)
 #include <immintrin.h>
 #endif
@@ -12,214 +10,72 @@
 #include <arm_sve.h>
 #endif
 
+#include "celero/Celero.h"
+
+#include "triangle.h"
+
 CELERO_MAIN
 
-struct Point2D
-{
-    int32_t x;
-    int32_t y;
-};
+static constexpr int32_t IMAGE_WIDTH = 2048;
+static constexpr int32_t IMAGE_HEIGHT = 2048;
+static uint32_t image[IMAGE_WIDTH * IMAGE_HEIGHT] = {0};
 
-int32_t PointSide(const Point2D &a, const Point2D &b, const Point2D &c)
-{
-    return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
-}
+static point2d_t v0{IMAGE_WIDTH, IMAGE_HEIGHT};
+static point2d_t v1{0, IMAGE_HEIGHT};
+static point2d_t v2{0, 0};
 
-void DrawTriangle(size_t window_width, size_t window_height, uint32_t *framebuffer, const Point2D &v0, const Point2D &v1, const Point2D &v2)
-{
-    Point2D p;
-    for (p.y = 0; p.y < window_height; p.y++)
-    {
-        for (p.x = 0; p.x < window_width; p.x++)
-        {
-            int32_t w0 = PointSide(v1, v2, p);
-            int32_t w1 = PointSide(v2, v0, p);
-            int32_t w2 = PointSide(v0, v1, p);
+static uint32_t color = 0xFF0000FF;
 
-            if (w0 >= 0 && w1 >= 0 && w2 >= 0)
-            {
-                framebuffer[p.x * window_width + p.y] = 0xffffffff;
-            }
-        }
-    }
-}
-
-class DemoSimpleFixture : public celero::TestFixture
+class demo_simple_fixture : public celero::TestFixture
 {
 };
 
-BASELINE_F(DemoSimple, Baseline, DemoSimpleFixture, 16, 4096)
+BASELINE_F(demo_simple, general, demo_simple_fixture, 32, 16384)
 {
-    static constexpr int32_t window_width = 512;
-    static constexpr int32_t window_height = 512;
-
-    uint32_t framebuffer[512 * 512] = {0};
-    Point2D a{window_width, window_height};
-    Point2D b{0, window_height};
-    Point2D c{0, 0};
-
     celero::DoNotOptimizeAway([&]()
-                              { DrawTriangle(window_width, window_height, framebuffer, a, b, c); });
+                              { draw_triangle_general(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color); });
+}
+
+BENCHMARK_F(demo_simple, optimized_1, demo_simple_fixture, 32, 16384)
+{
+    celero::DoNotOptimizeAway([&]()
+                              { draw_triangle_optimized_1(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color); });
+}
+
+BENCHMARK_F(demo_simple, optimized_2, demo_simple_fixture, 32, 16384)
+{
+    celero::DoNotOptimizeAway([&]()
+                              { draw_triangle_optimized_2(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color); });
 }
 
 #if defined(__ARM_NEON)
 
-BENCHMARK_F(DemoSimple, NEON, DemoSimpleFixture, 16, 4096)
+BENCHMARK_F(demo_simple, NEON, demo_simple_fixture, 32, 16384)
 {
-    static constexpr int32_t window_width = 512;
-    static constexpr int32_t window_height = 512;
-
-    uint32_t framebuffer[512 * 512] = {0};
-    Point2D a{window_width, window_height};
-    Point2D b{0, window_height};
-    Point2D c{0, 0};
-
-    celero::DoNotOptimizeAway([&]()
-                              { DrawTriangle(window_width, window_height, framebuffer, a, b, c); });
 }
 
 #endif
 
 #if defined(__ARM_FEATURE_SVE)
 
-BENCHMARK_F(DemoSimple, SVE, DemoSimpleFixture, 16, 4096)
+BENCHMARK_F(demo_simple, SVE, demo_simple_fixture, 32, 16384)
 {
-    static constexpr int32_t window_width = 512;
-    static constexpr int32_t window_height = 512;
-
-    uint32_t framebuffer[512 * 512] = {0};
-    Point2D a{window_width, window_height};
-    Point2D b{0, window_height};
-    Point2D c{0, 0};
-
-    celero::DoNotOptimizeAway([&]()
-                              { DrawTriangle(window_width, window_height, framebuffer, a, b, c); });
 }
 
 #endif
 
 #if defined(__AVX2__)
 
-struct Edge
+BENCHMARK_F(demo_simple, AVX2, demo_simple_fixture, 32, 16384)
 {
-    static constexpr int32_t StepXSize = 8;
-    static constexpr int32_t StepYSize = 1;
-
-    __m256i OneStepX;
-    __m256i OneStepY;
-
-    __m256i Initialize(const Point2D &v0, const Point2D &v1, const Point2D &origin);
-};
-
-__m256i Edge::Initialize(const Point2D &v0, const Point2D &v1, const Point2D &origin)
-{
-    // Edge setup
-    const int32_t A = v0.y - v1.y, B = v1.x - v0.x;
-    const int32_t C = v0.x * v1.y - v0.y * v1.x;
-
-    // Step deltas
-    const int32_t OneStepXInitial = A * StepXSize;
-    const int32_t OneStepYInitial = B * StepYSize;
-    OneStepX = _mm256_set1_epi32(OneStepXInitial);
-    OneStepY = _mm256_set1_epi32(OneStepYInitial);
-
-    // x/y values for initial pixel block
-    const __m256i Steps = _mm256_setr_epi32(0, 1, 2, 3, 4, 5, 6, 7);
-    const __m256i XInitial = _mm256_set1_epi32(origin.x);
-    const __m256i X = _mm256_add_epi32(XInitial, Steps);
-    const __m256i Y = _mm256_set1_epi32(origin.y);
-
-    // Edge function values at origin
-    const __m256i AResult = _mm256_set1_epi32(A);
-    const __m256i AMultiply = _mm256_mul_epi32(AResult, X);
-    const __m256i BResult = _mm256_set1_epi32(B);
-    const __m256i BMultiply = _mm256_mul_epi32(BResult, Y);
-    const __m256i CResult = _mm256_set1_epi32(C);
-    const __m256i AddAB = _mm256_add_epi32(AMultiply, BMultiply);
-    const __m256i AddABC = _mm256_add_epi32(AddAB, CResult);
-
-    return AddABC;
-}
-
-void DrawTriangle_AVX2(size_t window_width, size_t window_height, uint32_t *framebuffer, const Point2D &v0, const Point2D &v1, const Point2D &v2)
-{
-    // Bounding box and clipping again as before
-
-    // Triangle setup
-    Point2D p = {0, 0};
-    Edge e01, e12, e20;
-
-    __m256i w0_row = e12.Initialize(v1, v2, p);
-    __m256i w1_row = e20.Initialize(v2, v0, p);
-    __m256i w2_row = e01.Initialize(v0, v1, p);
-
-    // Rasterize
-    for (p.y = 0; p.y < window_height; p.y += Edge::StepYSize)
-    {
-        // Barycentric coordinates at start of row
-        __m256i w0 = w0_row;
-        __m256i w1 = w1_row;
-        __m256i w2 = w2_row;
-
-        for (p.x = 0; p.x < window_width; p.x += Edge::StepXSize)
-        {
-            // If p is on or inside all edges for any pixels,
-            // render those pixels.
-            const __m256i first_mask = _mm256_or_si256(w0, w1);
-            const __m256i second_mask = _mm256_or_si256(first_mask, w2);
-            const __m256i constant_zero = _mm256_set1_epi32(0);
-            const __m256i compare_eq = _mm256_cmpeq_epi32(second_mask, constant_zero);
-            const __m256i compare_gt = _mm256_cmpgt_epi32(second_mask, constant_zero);
-            const __m256i final_mask = _mm256_or_si256(compare_eq, compare_gt);
-            int integer_mask = _mm256_movemask_epi8(final_mask);
-            if (integer_mask > 0)
-            {
-                framebuffer[p.x * window_width + p.y] = 0xffffffff;
-            }
-
-            // One step to the right
-            w0 = _mm256_add_epi32(w0, e12.OneStepX);
-            w1 = _mm256_add_epi32(w1, e20.OneStepX);
-            w2 = _mm256_add_epi32(w2, e01.OneStepX);
-        }
-
-        // One row step
-        w0_row = _mm256_add_epi32(w0_row, e12.OneStepY);
-        w1_row = _mm256_add_epi32(w1_row, e20.OneStepY);
-        w2_row = _mm256_add_epi32(w2_row, e01.OneStepY);
-    }
-}
-
-BENCHMARK_F(DemoSimple, AVX2, DemoSimpleFixture, 16, 4096)
-{
-    static constexpr int32_t window_width = 512;
-    static constexpr int32_t window_height = 512;
-
-    uint32_t framebuffer[512 * 512] = {0};
-    Point2D a{window_width, window_height};
-    Point2D b{0, window_height};
-    Point2D c{0, 0};
-
-    celero::DoNotOptimizeAway([&]()
-                              { DrawTriangle_AVX2(window_width, window_height, framebuffer, a, b, c); });
 }
 
 #endif
 
 #if defined(__AVX512F__)
 
-BENCHMARK_F(DemoSimple, AVX512, DemoSimpleFixture, 16, 4096)
+BENCHMARK_F(demo_simple, AVX512, demo_simple_fixture, 32, 16384)
 {
-    static constexpr int32_t window_width = 512;
-    static constexpr int32_t window_height = 512;
-
-    uint32_t framebuffer[512 * 512] = {0};
-    Point2D a{window_width, window_height};
-    Point2D b{0, window_height};
-    Point2D c{0, 0};
-
-    celero::DoNotOptimizeAway([&]()
-                              { DrawTriangle(window_width, window_height, framebuffer, a, b, c); });
 }
 
 #endif
