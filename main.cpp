@@ -59,9 +59,9 @@ int32_t main(int32_t argument_count, char **arguments)
     SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, WINDOW_WIDTH, WINDOW_HEIGHT);
     uint8_t *pixels = new uint8_t[WINDOW_WIDTH * WINDOW_HEIGHT * 4];
 
-    Point2D a{WINDOW_WIDTH, WINDOW_HEIGHT};
-    Point2D b{0, WINDOW_HEIGHT};
-    Point2D c{0, 0};
+    Point2D a{WINDOW_WIDTH - 10, WINDOW_HEIGHT - 10};
+    Point2D b{10, WINDOW_HEIGHT - 10};
+    Point2D c{10, 10};
 
     bool running = true;
     while (running)
