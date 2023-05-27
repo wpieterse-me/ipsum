@@ -2,4 +2,4 @@
 
 ./build.sh x86_general_release
 
-./build/x86_general_release/draw
+./build/x86_general_release/raycaster
