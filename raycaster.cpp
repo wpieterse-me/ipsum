@@ -127,7 +127,7 @@ int32_t main(int32_t argument_count, char **arguments)
 
                 if (map[int(cx) + int(cy) * map_w] != ' ')
                 {
-                    size_t column_height = win_h / t;
+                    size_t column_height = win_h / (t * cos(angle - player_a));
                     draw_rectangle(framebuffer, win_w, win_h, win_w / 2 + i, win_h / 2 - column_height / 2, 1, column_height, pack_color(0, 0, 255));
                     break;
                 }
