@@ -1,5 +1,5 @@
 cc_library(
-    name = "export",
+    name = "celero",
     srcs = glob(
         include = [
             "src/*.cpp",
