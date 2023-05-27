@@ -12,7 +12,7 @@ void DrawPixel(uint8_t *framebuffer, int32_t x, int32_t y, uint32_t color)
     extended_framebuffer[y * WINDOW_WIDTH + x] = color;
 }
 
-void DrawStraightLaine(uint8_t *framebuffer, int32_t start_x, int32_t end_x, int32_t y, uint32_t color)
+void DrawStraightLine(uint8_t *framebuffer, int32_t start_x, int32_t end_x, int32_t y, uint32_t color)
 {
     for (int32_t counter = start_x; counter < end_x; counter++)
     {
