@@ -73,5 +73,13 @@ int32_t main(int32_t argument_count, char **arguments)
     draw_triangle_optimized_2(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
     write_framebuffer("out_optimized_2.ppm", image, IMAGE_WIDTH, IMAGE_HEIGHT);
 
+#if defined(__AVX2__)
+
+    clear_image(image, IMAGE_WIDTH, IMAGE_HEIGHT);
+    draw_triangle_avx2(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
+    write_framebuffer("out_avx2.ppm", image, IMAGE_WIDTH, IMAGE_HEIGHT);
+
+#endif
+
     return 0;
 }
