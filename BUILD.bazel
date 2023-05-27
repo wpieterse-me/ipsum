@@ -7,3 +7,13 @@ cc_library(
         "perfetto.h",
     ],
 )
+
+cc_binary(
+    name = "raycaster",
+    srcs = [
+        "raycaster.cpp",
+    ],
+    deps = [
+        ":perfetto",
+    ],
+)
