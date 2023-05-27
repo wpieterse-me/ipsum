@@ -66,8 +66,10 @@ BENCHMARK_F(demo_simple, SVE, demo_simple_fixture, 32, 16384)
 
 #if defined(__AVX2__)
 
-BENCHMARK_F(demo_simple, AVX2, demo_simple_fixture, 32, 16384)
+BENCHMARK_F(demo_simple, AVX2, demo_simple_fixture, 100, 1000000)
 {
+    celero::DoNotOptimizeAway([&]()
+                              { draw_triangle_avx2(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color); });
 }
 
 #endif
