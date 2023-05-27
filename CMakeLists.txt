@@ -18,6 +18,8 @@ FetchContent_MakeAvailable(
     celero
 )
 
+find_package(SDL2 REQUIRED)
+
 add_executable(
     bench
     bench.cpp
@@ -27,4 +29,20 @@ target_link_libraries(
     bench
     PRIVATE
         celero
+)
+
+add_executable(
+    draw
+    main.cpp
+)
+
+target_include_directories(
+    draw
+    PRIVATE
+        ${SDL2_INCLUDE_DIR}
+)
+
+target_link_libraries(
+    draw
+    ${SDL2_LIBRARIES}
 )
