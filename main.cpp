@@ -1,9 +1,18 @@
 #include <cstdint>
+#include <fstream>
+#include <chrono>
+#include <thread>
+
+#include "perfetto.h"
 
 #include <SDL2/SDL.h>
 
 static constexpr int32_t WINDOW_WIDTH = 640;
 static constexpr int32_t WINDOW_HEIGHT = 480;
+
+PERFETTO_DEFINE_CATEGORIES(perfetto::Category("rendering").SetDescription("Events from the graphics subsystem"));
+
+PERFETTO_TRACK_EVENT_STATIC_STORAGE();
 
 void DrawPixel(uint8_t *framebuffer, int32_t x, int32_t y, uint32_t color)
 {
@@ -50,8 +59,61 @@ void DrawTriangle(size_t window_width, size_t window_height, uint8_t *framebuffe
     }
 }
 
+void InitializePerfetto()
+{
+    perfetto::TracingInitArgs args;
+    // The backends determine where trace events are recorded. For this example we
+    // are going to use the in-process tracing service, which only includes in-app
+    // events.
+    args.backends = perfetto::kInProcessBackend;
+    perfetto::Tracing::Initialize(args);
+    perfetto::TrackEvent::Register();
+}
+
+std::unique_ptr<perfetto::TracingSession> StartTracing()
+{
+    // The trace config defines which types of data sources are enabled for
+    // recording. In this example we just need the "track_event" data source,
+    // which corresponds to the TRACE_EVENT trace points.
+    perfetto::TraceConfig cfg;
+    cfg.add_buffers()->set_size_kb(1024);
+    auto *ds_cfg = cfg.add_data_sources()->mutable_config();
+    ds_cfg->set_name("track_event");
+    auto tracing_session = perfetto::Tracing::NewTrace();
+    tracing_session->Setup(cfg);
+    tracing_session->StartBlocking();
+    return tracing_session;
+}
+
+void StopTracing(std::unique_ptr<perfetto::TracingSession> tracing_session)
+{
+    // Make sure the last event is closed for this example.
+    perfetto::TrackEvent::Flush();
+    // Stop tracing and read the trace data.
+    tracing_session->StopBlocking();
+    std::vector<char> trace_data(tracing_session->ReadTraceBlocking());
+    // Write the result into a file.
+    // Note: To save memory with longer traces, you can tell Perfetto to write
+    // directly into a file by passing a file descriptor into Setup() above.
+    std::ofstream output;
+    output.open("example.pftrace", std::ios::out | std::ios::binary);
+    output.write(&trace_data[0], std::streamsize(trace_data.size()));
+    output.close();
+    PERFETTO_LOG(
+        "Trace written in example.pftrace file. To read this trace in "
+        "text form, run `./tools/traceconv text example.pftrace`");
+}
+
 int32_t main(int32_t argument_count, char **arguments)
 {
+    InitializePerfetto();
+    auto tracing_session = StartTracing();
+    // Give a custom name for the traced process.
+    perfetto::ProcessTrack process_track = perfetto::ProcessTrack::Current();
+    perfetto::protos::gen::TrackDescriptor desc = process_track.Serialize();
+    desc.mutable_process()->set_process_name("Example");
+    perfetto::TrackEvent::SetTrackDescriptor(process_track, desc);
+
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_Window *window = SDL_CreateWindow("SDL2Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
@@ -70,6 +132,8 @@ int32_t main(int32_t argument_count, char **arguments)
     bool running = true;
     while (running)
     {
+        TRACE_EVENT("rendering", "Loop");
+
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
@@ -103,5 +167,7 @@ int32_t main(int32_t argument_count, char **arguments)
     SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+
+    StopTracing(std::move(tracing_session));
     return 0;
 }

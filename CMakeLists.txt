@@ -8,6 +8,8 @@ project(
 
 include(FetchContent)
 
+find_package(Threads)
+
 FetchContent_Declare(
     celero
     GIT_REPOSITORY https://github.com/DigitalInBlue/Celero.git
@@ -31,6 +33,12 @@ target_link_libraries(
         celero
 )
 
+add_library(
+    perfetto
+    STATIC
+    perfetto.cc
+)
+
 add_executable(
     draw
     main.cpp
@@ -39,10 +47,14 @@ add_executable(
 target_include_directories(
     draw
     PRIVATE
+        .
         ${SDL2_INCLUDE_DIR}
 )
 
 target_link_libraries(
     draw
-    ${SDL2_LIBRARIES}
+    PRIVATE
+        ${SDL2_LIBRARIES}
+        ${CMAKE_THREAD_LIBS_INIT}
+        perfetto
 )
