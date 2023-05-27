@@ -9,6 +9,13 @@ cc_binary(
 )
 
 cc_binary(
+    name = "rasterizer",
+    srcs = [
+        "rasterizer.cpp",
+    ],
+)
+
+cc_binary(
     name = "raycaster",
     srcs = [
         "raycaster.cpp",
