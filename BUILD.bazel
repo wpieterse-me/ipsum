@@ -1,0 +1,9 @@
+cc_library(
+    name = "perfetto",
+    srcs = [
+        "perfetto.cc",
+    ],
+    hdrs = [
+        "perfetto.h",
+    ],
+)
