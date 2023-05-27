@@ -39,13 +39,19 @@ void drop_ppm_image(const std::string filename, const std::vector<uint32_t> &ima
 
 void draw_rectangle(std::vector<uint32_t> &image, const size_t img_w, const size_t img_h, const size_t x, const size_t y, const size_t w, const size_t h, const uint32_t color)
 {
-    for (size_t i = 0; i < w; i++)
+    for (size_t j = 0; j < h; j++)
     {
-        for (size_t j = 0; j < h; j++)
+        size_t cy = y + j;
+        if (cy >= img_h)
+        {
+            continue;
+        }
+
+        for (size_t i = 0; i < w; i++)
         {
             size_t cx = x + i;
-            size_t cy = y + j;
-            if (cx >= img_w || cy >= img_h)
+
+            if (cx >= img_w)
             {
                 continue;
             }
