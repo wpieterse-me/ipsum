@@ -67,6 +67,9 @@ const char map[] = "0000222222220000"
                    "0              0"
                    "0002222222200000"; // our game map
 
+float player_x = 3.456;
+float player_y = 2.345;
+
 int32_t main(int32_t argument_count, char **arguments)
 {
     const size_t win_w = 512;
@@ -102,6 +105,8 @@ int32_t main(int32_t argument_count, char **arguments)
             draw_rectangle(framebuffer, win_w, win_h, rect_x, rect_y, rect_w, rect_h, pack_color(0, 255, 255));
         }
     }
+
+    draw_rectangle(framebuffer, win_w, win_h, player_x * rect_w, player_y * rect_h, 5, 5, pack_color(255, 255, 255));
 
     drop_ppm_image("out.ppm", framebuffer, win_w, win_h);
     return 0;
