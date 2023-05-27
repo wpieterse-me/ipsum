@@ -30,19 +30,19 @@ class demo_simple_fixture : public celero::TestFixture
 {
 };
 
-BASELINE_F(demo_simple, general, demo_simple_fixture, 32, 16384)
+BASELINE_F(demo_simple, general, demo_simple_fixture, 50, 100000)
 {
     celero::DoNotOptimizeAway([&]()
                               { draw_triangle_general(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color); });
 }
 
-BENCHMARK_F(demo_simple, optimized_1, demo_simple_fixture, 32, 16384)
+BENCHMARK_F(demo_simple, optimized_1, demo_simple_fixture, 50, 100000)
 {
     celero::DoNotOptimizeAway([&]()
                               { draw_triangle_optimized_1(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color); });
 }
 
-BENCHMARK_F(demo_simple, optimized_2, demo_simple_fixture, 32, 16384)
+BENCHMARK_F(demo_simple, optimized_2, demo_simple_fixture, 50, 100000)
 {
     celero::DoNotOptimizeAway([&]()
                               { draw_triangle_optimized_2(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color); });
