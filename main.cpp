@@ -63,6 +63,10 @@ int32_t main(int32_t argument_count, char **arguments)
     Point2D b{10, WINDOW_HEIGHT - 10};
     Point2D c{10, 10};
 
+    int32_t fps = 0;
+    int32_t fpsTimer = 0;
+    char fpsText[256] = {0};
+
     bool running = true;
     while (running)
     {
@@ -82,6 +86,17 @@ int32_t main(int32_t argument_count, char **arguments)
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, texture, nullptr, nullptr);
         SDL_RenderPresent(renderer);
+
+        int32_t now = SDL_GetTicks();
+        if (now > (fpsTimer + 1000))
+        {
+            sprintf(fpsText, "%d FPS", fps);
+            printf("%s\n", fpsText);
+            fpsTimer = now;
+            fps = 0;
+        }
+
+        fps++;
     }
 
     delete[] pixels;
