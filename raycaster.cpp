@@ -87,6 +87,13 @@ int32_t main(int32_t argument_count, char **arguments)
 
     const float fov = M_PI / 3.0f;
 
+    const size_t ncolors = 10;
+    std::vector<uint32_t> colors(ncolors);
+    for (size_t i = 0; i < ncolors; i++)
+    {
+        colors[i] = pack_color(rand() & 255, rand() & 255, rand() & 255);
+    }
+
     for (size_t frame = 0; frame < 360; frame++)
     {
         std::stringstream ss;
@@ -107,8 +114,9 @@ int32_t main(int32_t argument_count, char **arguments)
 
                 size_t rect_x = i * rect_w;
                 size_t rect_y = j * rect_h;
+                size_t icolor = map[i + j * map_w] - '0';
 
-                draw_rectangle(framebuffer, win_w, win_h, rect_x, rect_y, rect_w, rect_h, pack_color(255, 0, 0));
+                draw_rectangle(framebuffer, win_w, win_h, rect_x, rect_y, rect_w, rect_h, colors[icolor]);
             }
         }
 
@@ -127,8 +135,9 @@ int32_t main(int32_t argument_count, char **arguments)
 
                 if (map[int(cx) + int(cy) * map_w] != ' ')
                 {
+                    size_t icolor = map[int(cx) + int(cy) * map_w] - '0';
                     size_t column_height = win_h / (t * cos(angle - player_a));
-                    draw_rectangle(framebuffer, win_w, win_h, win_w / 2 + i, win_h / 2 - column_height / 2, 1, column_height, pack_color(0, 0, 255));
+                    draw_rectangle(framebuffer, win_w, win_h, win_w / 2 + i, win_h / 2 - column_height / 2, 1, column_height, colors[icolor]);
                     break;
                 }
             }
