@@ -51,8 +51,8 @@ void clear_image(uint32_t *image, int32_t image_width, int32_t image_height)
 
 int32_t main(int32_t argument_count, char **arguments)
 {
-    static constexpr int32_t IMAGE_WIDTH = 8192;
-    static constexpr int32_t IMAGE_HEIGHT = 8192;
+    static constexpr int32_t IMAGE_WIDTH = 512;
+    static constexpr int32_t IMAGE_HEIGHT = 512;
 
     point2d_t v0{IMAGE_WIDTH, IMAGE_HEIGHT};
     point2d_t v1{0, IMAGE_HEIGHT};
