@@ -153,9 +153,9 @@ void draw_triangle_avx2(uint32_t *image, int32_t image_width, int32_t image_heig
 
     __m256i zero = _mm256_set1_epi32(0);
 
-    __m256i w0_row = e01.initialize(v1, v2, current_point);
-    __m256i w1_row = e12.initialize(v2, v0, current_point);
-    __m256i w2_row = e20.initialize(v0, v1, current_point);
+    __m256i w0_row = e12.initialize(v1, v2, current_point);
+    __m256i w1_row = e20.initialize(v2, v0, current_point);
+    __m256i w2_row = e01.initialize(v0, v1, current_point);
 
     for (current_point.y = 0; current_point.y < image_height; current_point.y += edge_t::step_y_size)
     {
