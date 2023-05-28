@@ -105,6 +105,129 @@ void draw_triangle_optimized_2(uint32_t *image, int32_t image_width, int32_t ima
     }
 }
 
+struct span_t
+{
+    int32_t v0_x;
+    int32_t v1_x;
+
+    span_t(int32_t v0_x_in, int32_t v1_x_in)
+    {
+        if (v0_x_in < v1_x_in)
+        {
+            v0_x = v0_x_in;
+            v1_x = v1_x_in;
+        }
+        else
+        {
+            v0_x = v1_x_in;
+            v1_x = v0_x_in;
+        }
+    }
+};
+
+struct span_edge_t
+{
+    point2d_t v0;
+    point2d_t v1;
+
+    span_edge_t(point2d_t v0_in, point2d_t v1_in)
+    {
+        if (v0_in.y < v1_in.y)
+        {
+            v0 = v0_in;
+            v1 = v1_in;
+        }
+        else
+        {
+            v0 = v1_in;
+            v1 = v0_in;
+        }
+    }
+};
+
+void draw_triangle_span(uint32_t *image, int32_t image_width, int32_t image_height, span_t span, int32_t y, uint32_t color)
+{
+    int32_t xdiff = span.v1_x - span.v0_x;
+    if (xdiff == 0)
+    {
+        return;
+    }
+
+    float factor = 0.0f;
+    float factor_step = 1.0f / xdiff;
+
+    for (int32_t x = span.v0_x; x < span.v1_x; x++)
+    {
+        image[x * image_width + y] = color;
+
+        factor += factor_step;
+    }
+}
+
+void draw_triangle_span_edge(uint32_t *image, int32_t image_width, int32_t image_height, span_edge_t &e0, span_edge_t &e1, uint32_t color)
+{
+    float e0ydiff = e0.v1.y - e0.v0.y;
+    if (e0ydiff == 0.0f)
+    {
+        return;
+    }
+
+    float e1ydiff = e1.v1.y - e1.v0.y;
+    if (e1ydiff == 0.0f)
+    {
+        return;
+    }
+
+    float e0xdiff = e0.v1.x - e0.v0.x;
+    float e1xdiff = e1.v1.x - e1.v0.x;
+
+    float factor_1 = static_cast<float>(e1.v0.y - e0.v0.y) / e0ydiff;
+    float factor_1_step = 1.0f / e0ydiff;
+    float factor_2 = 0.0f;
+    float factor_2_step = 1.0f / e1ydiff;
+
+    for (int32_t y = e1.v0.y; y < e1.v1.y; y++)
+    {
+        int32_t x_start = e0.v0.x + static_cast<int32_t>(e0xdiff * factor_1);
+        int32_t x_end = e1.v0.x + static_cast<int32_t>(e1xdiff * factor_2);
+
+        span_t span{x_start, x_end};
+
+        draw_triangle_span(image, image_width, image_height, span, y, color);
+
+        factor_1 += factor_1_step;
+        factor_2 += factor_2_step;
+    }
+}
+
+void draw_triangle_span(uint32_t *image, int32_t image_width, int32_t image_height, const point2d_t &v0, const point2d_t &v1, const point2d_t &v2, uint32_t color)
+{
+    span_edge_t edges[] = {
+        span_edge_t{v0, v1},
+        span_edge_t{v1, v2},
+        span_edge_t{v2, v0},
+    };
+
+    int32_t max_length = 0;
+    int32_t long_edge = 0;
+
+    for (int32_t index = 0; index < 3; index++)
+    {
+        int32_t length = edges[index].v1.y - edges[index].v0.y;
+        if (length > max_length)
+        {
+            max_length = length;
+            long_edge = index;
+        }
+    }
+
+    int32_t short_edge_1 = (long_edge + 1) % 3;
+    int32_t short_edge_2 = (long_edge + 2) % 3;
+
+    draw_triangle_span_edge(image, image_width, image_height, edges[long_edge], edges[short_edge_1], color);
+    draw_triangle_span_edge(image, image_width, image_height, edges[long_edge], edges[short_edge_2], color);
+}
+
 #if defined(__AVX2__)
 
 struct edge_t
