@@ -26,7 +26,6 @@ cc_binary(
     ],
     deps = [
         ":triangle",
-        "//third_party/perfetto",
     ],
 )
 

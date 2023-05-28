@@ -1,57 +1,7 @@
 #include <cstdint>
 #include <fstream>
 
-#include "third_party/perfetto/perfetto.h"
-
 #include "triangle.h"
-
-PERFETTO_DEFINE_CATEGORIES(perfetto::Category("rendering").SetDescription("Events from the graphics subsystem"));
-
-PERFETTO_TRACK_EVENT_STATIC_STORAGE();
-
-void initialize_perfetto()
-{
-    perfetto::TracingInitArgs arguments;
-
-    arguments.backends = perfetto::kInProcessBackend;
-
-    perfetto::Tracing::Initialize(arguments);
-    perfetto::TrackEvent::Register();
-}
-
-std::unique_ptr<perfetto::TracingSession> start_tracing()
-{
-    perfetto::TraceConfig configuration;
-
-    configuration.add_buffers()->set_size_kb(1024);
-
-    auto *datasource_configuration = configuration.add_data_sources()->mutable_config();
-
-    datasource_configuration->set_name("track_event");
-
-    auto tracing_session = perfetto::Tracing::NewTrace();
-
-    tracing_session->Setup(configuration);
-    tracing_session->StartBlocking();
-
-    return tracing_session;
-}
-
-void stop_tracing(std::unique_ptr<perfetto::TracingSession> tracing_session)
-{
-    perfetto::TrackEvent::Flush();
-    tracing_session->StopBlocking();
-
-    std::vector<char> trace_data(tracing_session->ReadTraceBlocking());
-
-    std::ofstream output;
-
-    output.open("example.pftrace", std::ios::out | std::ios::binary);
-    output.write(&trace_data[0], std::streamsize(trace_data.size()));
-    output.close();
-
-    PERFETTO_LOG("Trace written in example.pftrace file. To read this trace in text form, run `./tools/traceconv text example.pftrace`");
-}
 
 uint32_t pack_color(const uint8_t red, const uint8_t green, const uint8_t blue, const uint8_t alpha = 255)
 {
@@ -111,59 +61,25 @@ int32_t main(int32_t argument_count, char **arguments)
 
     uint32_t *image = new uint32_t[IMAGE_WIDTH * IMAGE_HEIGHT];
 
-    initialize_perfetto();
-
-    auto tracing_session = start_tracing();
-
-    perfetto::ProcessTrack process_track = perfetto::ProcessTrack::Current();
-
-    perfetto::protos::gen::TrackDescriptor desc = process_track.Serialize();
-
-    desc.mutable_process()->set_process_name("Example");
-
-    perfetto::TrackEvent::SetTrackDescriptor(process_track, desc);
-
     clear_image(image, IMAGE_WIDTH, IMAGE_HEIGHT);
-
-    {
-        TRACE_EVENT("rendering", "general");
-        draw_triangle_general(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
-    }
-
+    draw_triangle_general(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
     write_framebuffer("out_general.ppm", image, IMAGE_WIDTH, IMAGE_HEIGHT);
 
     clear_image(image, IMAGE_WIDTH, IMAGE_HEIGHT);
-
-    {
-        TRACE_EVENT("rendering", "optimized_1");
-        draw_triangle_optimized_1(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
-    }
-
+    draw_triangle_optimized_1(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
     write_framebuffer("out_optimized_1.ppm", image, IMAGE_WIDTH, IMAGE_HEIGHT);
 
     clear_image(image, IMAGE_WIDTH, IMAGE_HEIGHT);
-
-    {
-        TRACE_EVENT("rendering", "optimized_2");
-        draw_triangle_optimized_2(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
-    }
-
+    draw_triangle_optimized_2(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
     write_framebuffer("out_optimized_2.ppm", image, IMAGE_WIDTH, IMAGE_HEIGHT);
 
 #if defined(__AVX2__)
 
     clear_image(image, IMAGE_WIDTH, IMAGE_HEIGHT);
-
-    {
-        TRACE_EVENT("rendering", "avx2");
-        draw_triangle_avx2(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
-    }
-
+    draw_triangle_avx2(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
     write_framebuffer("out_avx2.ppm", image, IMAGE_WIDTH, IMAGE_HEIGHT);
 
 #endif
-
-    stop_tracing(std::move(tracing_session));
 
     return 0;
 }
