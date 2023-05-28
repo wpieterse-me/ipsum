@@ -30,7 +30,13 @@ class demo_simple_fixture : public celero::TestFixture
 {
 };
 
-BASELINE_F(demo_simple, general, demo_simple_fixture, 10, 1000)
+BASELINE_F(demo_simple, span, demo_simple_fixture, 10, 1000)
+{
+    draw_triangle_span(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
+    celero::DoNotOptimizeAway(image[0] == color);
+}
+
+BENCHMARK_F(demo_simple, general, demo_simple_fixture, 10, 1000)
 {
     draw_triangle_general(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
     celero::DoNotOptimizeAway(image[0] == color);
