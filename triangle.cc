@@ -228,6 +228,83 @@ void draw_triangle_span(uint32_t *image, int32_t image_width, int32_t image_heig
     draw_triangle_span_edge(image, image_width, image_height, edges[long_edge], edges[short_edge_2], color);
 }
 
+struct edge_equation_s
+{
+    float a;
+    float b;
+    float c;
+    bool tie;
+
+    edge_equation_s(const point2d_t &v0, const point2d_t &v1)
+    {
+        a = v0.y - v1.y;
+        b = v1.x - v0.x;
+        c = -(a * (v0.x + v1.x) + b * (v0.y + v1.y)) / 2;
+        tie = a != 0 ? a > 0 : b > 0;
+    }
+
+    float evaluate(float x, float y)
+    {
+        return a * x + b * y + c;
+    }
+
+    bool test(float x, float y)
+    {
+        return test(evaluate(x, y));
+    }
+
+    bool test(float v)
+    {
+        return (v > 0 || v == 0 && tie);
+    }
+};
+
+struct parameter_equation_s
+{
+    float a;
+    float b;
+    float c;
+
+    parameter_equation_s(float p0, float p1, float p2, const edge_equation_s &e0, const edge_equation_s &e1, const edge_equation_s &e2, float area)
+    {
+        float factor = 1.0f / (2.0f * area);
+
+        a = factor * (p0 * e0.a + p1 * e1.a + p2 * e2.a);
+        b = factor * (p0 * e0.b + p1 * e1.b + p2 * e2.b);
+        c = factor * (p0 * e0.c + p1 * e1.c + p2 * e2.c);
+    }
+
+    float evaluate(float x, float y)
+    {
+        return a * x + b * y + c;
+    }
+};
+
+void draw_triangle_trenki2(uint32_t *image, int32_t image_width, int32_t image_height, const point2d_t &v0, const point2d_t &v1, const point2d_t &v2, uint32_t color)
+{
+    edge_equation_s e0(v1, v2);
+    edge_equation_s e1(v2, v0);
+    edge_equation_s e2(v0, v1);
+
+    float area = 0.5f * (e0.c + e1.c + e2.c);
+
+    if (area < 0.0f)
+    {
+        return;
+    }
+
+    for (int32_t x = 0; x < image_width; x++)
+    {
+        for (int32_t y = 0; y < image_height; y++)
+        {
+            if (e0.test(x, y) && e1.test(x, y) && e2.test(x, y))
+            {
+                image[x * image_width + y] = color;
+            }
+        }
+    }
+}
+
 #if defined(__AVX2__)
 
 struct edge_t
