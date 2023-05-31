@@ -75,8 +75,8 @@ int32_t main(int32_t argument_count, char **arguments)
     */
 
     clear_image(image, IMAGE_WIDTH, IMAGE_HEIGHT);
-    draw_triangle_trenki2(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2);
-    write_framebuffer("out_trenki2.ppm", image, IMAGE_WIDTH, IMAGE_HEIGHT);
+    draw_triangle_trenki2_p1(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2);
+    write_framebuffer("out_trenki2_p1.ppm", image, IMAGE_WIDTH, IMAGE_HEIGHT);
 
     /*
     #if defined(__AVX2__)

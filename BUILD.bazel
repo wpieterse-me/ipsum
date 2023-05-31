@@ -12,6 +12,7 @@ cc_library(
     name = "triangle",
     srcs = [
         "triangle.cc",
+        "triangle_trinki2_p1.cc",
     ],
     hdrs = [
         "triangle.h",
