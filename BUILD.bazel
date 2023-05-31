@@ -38,3 +38,11 @@ cc_binary(
         "//third_party/perfetto",
     ],
 )
+
+cc_binary(
+    name = "assembly",
+    srcs = [
+        "assembly.c",
+        "maxofthree.s",
+    ],
+)
