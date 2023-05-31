@@ -24,9 +24,9 @@ cc_library(
 )
 
 cc_binary(
-    name = "bench",
+    name = "bench_triangle",
     srcs = [
-        "bench.cpp",
+        "bench_triangle.cpp",
     ],
     deps = [
         ":triangle",
