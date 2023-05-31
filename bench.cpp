@@ -28,12 +28,7 @@ class demo_simple_fixture : public celero::TestFixture
 {
 };
 
-BASELINE_F(demo_simple, span, demo_simple_fixture, 100, 100)
-{
-    celero::DoNotOptimizeAway(image[0] == 128);
-}
-
-BENCHMARK_F(demo_simple, general, demo_simple_fixture, 100, 100)
+BASELINE_F(demo_simple, general, demo_simple_fixture, 100, 100)
 {
     celero::DoNotOptimizeAway(image[0] == 128);
 }
@@ -45,6 +40,12 @@ BENCHMARK_F(demo_simple, optimized_1, demo_simple_fixture, 100, 100)
 
 BENCHMARK_F(demo_simple, optimized_2, demo_simple_fixture, 100, 100)
 {
+    celero::DoNotOptimizeAway(image[0] == 128);
+}
+
+BENCHMARK_F(demo_simple, joshbeam, demo_simple_fixture, 100, 100)
+{
+    draw_triangle_joshbeam(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2);
     celero::DoNotOptimizeAway(image[0] == 128);
 }
 
