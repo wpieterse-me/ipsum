@@ -2,8 +2,10 @@
 #include <immintrin.h>
 #endif
 
+#include "util.h"
 #include "triangle.h"
 
+/*
 int32_t point_side(const point2d_t &v0, const point2d_t &v1, const point2d_t &v2)
 {
     return (v1.x - v0.x) * (v2.y - v0.y) - (v1.y - v0.y) * (v2.x - v0.x);
@@ -227,6 +229,7 @@ void draw_triangle_span(uint32_t *image, int32_t image_width, int32_t image_heig
     draw_triangle_span_edge(image, image_width, image_height, edges[long_edge], edges[short_edge_1], color);
     draw_triangle_span_edge(image, image_width, image_height, edges[long_edge], edges[short_edge_2], color);
 }
+*/
 
 struct edge_equation_s
 {
@@ -280,7 +283,7 @@ struct parameter_equation_s
     }
 };
 
-void draw_triangle_trenki2(uint32_t *image, int32_t image_width, int32_t image_height, const point2d_t &v0, const point2d_t &v1, const point2d_t &v2, uint32_t color)
+void draw_triangle_trenki2(uint32_t *image, int32_t image_width, int32_t image_height, const point2d_t &v0, const point2d_t &v1, const point2d_t &v2)
 {
     edge_equation_s e0(v1, v2);
     edge_equation_s e1(v2, v0);
@@ -293,18 +296,30 @@ void draw_triangle_trenki2(uint32_t *image, int32_t image_width, int32_t image_h
         return;
     }
 
-    for (int32_t x = 0; x < image_width; x++)
+    parameter_equation_s r(v0.r, v1.r, v2.r, e0, e1, e2, area);
+    parameter_equation_s g(v0.g, v1.g, v2.g, e0, e1, e2, area);
+    parameter_equation_s b(v0.b, v1.b, v2.b, e0, e1, e2, area);
+
+    for (float x = 0.5f; x < ((float)image_width) + 0.5f; x += 1.0f)
     {
-        for (int32_t y = 0; y < image_height; y++)
+        for (float y = 0.5f; y < ((float)image_height) + 0.5f; y += 1.0f)
         {
             if (e0.test(x, y) && e1.test(x, y) && e2.test(x, y))
             {
-                image[x * image_width + y] = color;
+                int32_t x_coord = (int32_t)x;
+                int32_t y_coord = (int32_t)y;
+
+                int32_t r_color = (int32_t)(r.evaluate(x, y) * 255);
+                int32_t g_color = (int32_t)(g.evaluate(x, y) * 255);
+                int32_t b_color = (int32_t)(b.evaluate(x, y) * 255);
+
+                image[x_coord * image_width + y_coord] = pack_color(r_color, g_color, b_color);
             }
         }
     }
 }
 
+/*
 #if defined(__AVX2__)
 
 struct edge_t
@@ -424,3 +439,4 @@ void draw_triangle_avx2(uint32_t *image, int32_t image_width, int32_t image_heig
 }
 
 #endif
+*/

@@ -1,12 +1,8 @@
 #include <cstdint>
 #include <fstream>
 
+#include "util.h"
 #include "triangle.h"
-
-uint32_t pack_color(const uint8_t red, const uint8_t green, const uint8_t blue, const uint8_t alpha = 255)
-{
-    return (alpha << 24) + (blue << 16) + (green << 8) + red;
-}
 
 void unpack_color(const uint32_t &color, uint8_t &red, uint8_t &green, uint8_t &blue, uint8_t &alpha)
 {
@@ -54,13 +50,13 @@ int32_t main(int32_t argument_count, char **arguments)
     static constexpr int32_t IMAGE_WIDTH = 512;
     static constexpr int32_t IMAGE_HEIGHT = 512;
 
-    point2d_t v0{IMAGE_WIDTH, IMAGE_HEIGHT};
-    point2d_t v1{0, IMAGE_HEIGHT};
-    point2d_t v2{0, 0};
-    uint32_t color = pack_color(255, 0, 0);
+    point2d_t v0{IMAGE_WIDTH, IMAGE_HEIGHT, 1.0f, 0.0f, 0.0f};
+    point2d_t v1{0, IMAGE_HEIGHT, 0.0f, 1.0f, 0.0f};
+    point2d_t v2{0, 0, 0.0f, 0.0f, 1.0f};
 
     uint32_t *image = new uint32_t[IMAGE_WIDTH * IMAGE_HEIGHT];
 
+    /*
     clear_image(image, IMAGE_WIDTH, IMAGE_HEIGHT);
     draw_triangle_general(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
     write_framebuffer("out_general.ppm", image, IMAGE_WIDTH, IMAGE_HEIGHT);
@@ -76,18 +72,21 @@ int32_t main(int32_t argument_count, char **arguments)
     clear_image(image, IMAGE_WIDTH, IMAGE_HEIGHT);
     draw_triangle_span(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
     write_framebuffer("out_span.ppm", image, IMAGE_WIDTH, IMAGE_HEIGHT);
+    */
 
     clear_image(image, IMAGE_WIDTH, IMAGE_HEIGHT);
-    draw_triangle_trenki2(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
+    draw_triangle_trenki2(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2);
     write_framebuffer("out_trenki2.ppm", image, IMAGE_WIDTH, IMAGE_HEIGHT);
 
-#if defined(__AVX2__)
+    /*
+    #if defined(__AVX2__)
 
-    clear_image(image, IMAGE_WIDTH, IMAGE_HEIGHT);
-    draw_triangle_avx2(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
-    write_framebuffer("out_avx2.ppm", image, IMAGE_WIDTH, IMAGE_HEIGHT);
+        clear_image(image, IMAGE_WIDTH, IMAGE_HEIGHT);
+        draw_triangle_avx2(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2, color);
+        write_framebuffer("out_avx2.ppm", image, IMAGE_WIDTH, IMAGE_HEIGHT);
 
-#endif
+    #endif
+    */
 
     return 0;
 }
