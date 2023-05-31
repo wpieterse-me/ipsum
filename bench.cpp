@@ -33,16 +33,6 @@ BASELINE_F(demo_simple, general, demo_simple_fixture, 100, 100)
     celero::DoNotOptimizeAway(image[0] == 128);
 }
 
-BENCHMARK_F(demo_simple, optimized_1, demo_simple_fixture, 100, 100)
-{
-    celero::DoNotOptimizeAway(image[0] == 128);
-}
-
-BENCHMARK_F(demo_simple, optimized_2, demo_simple_fixture, 100, 100)
-{
-    celero::DoNotOptimizeAway(image[0] == 128);
-}
-
 BENCHMARK_F(demo_simple, joshbeam, demo_simple_fixture, 100, 100)
 {
     draw_triangle_joshbeam(image, IMAGE_WIDTH, IMAGE_HEIGHT, v0, v1, v2);
@@ -57,36 +47,16 @@ BENCHMARK_F(demo_simple, trinki2_p1, demo_simple_fixture, 100, 100)
 
 #if defined(__ARM_NEON)
 
-BENCHMARK_F(demo_simple, NEON, demo_simple_fixture, 100, 100)
-{
-    celero::DoNotOptimizeAway(image[0] == 128);
-}
-
 #endif
 
 #if defined(__ARM_FEATURE_SVE)
-
-BENCHMARK_F(demo_simple, SVE, demo_simple_fixture, 100, 100)
-{
-    celero::DoNotOptimizeAway(image[0] == 128);
-}
 
 #endif
 
 #if defined(__AVX2__)
 
-BENCHMARK_F(demo_simple, avx2, demo_simple_fixture, 100, 100)
-{
-    celero::DoNotOptimizeAway(image[0] == 128);
-}
-
 #endif
 
 #if defined(__AVX512F__)
-
-BENCHMARK_F(demo_simple, AVX512, demo_simple_fixture, 100, 100)
-{
-    celero::DoNotOptimizeAway(image[0] == 128);
-}
 
 #endif
