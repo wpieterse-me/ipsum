@@ -13,6 +13,16 @@ cc_library(
 )
 
 cc_binary(
+    name = "rasterizer",
+    srcs = [
+        "rasterizer.cpp",
+    ],
+    deps = [
+        ":triangle",
+    ],
+)
+
+cc_binary(
     name = "bench",
     srcs = [
         "bench.cpp",
