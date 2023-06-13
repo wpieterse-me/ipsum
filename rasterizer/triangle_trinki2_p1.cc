@@ -1,5 +1,5 @@
 #include "util.h"
-#include "triangle/triangle.h"
+#include "rasterizer/triangle.h"
 
 struct edge_equation_s
 {
