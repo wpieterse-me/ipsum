@@ -1,0 +1,24 @@
+cc_library(
+    name = "triangle",
+    srcs = [
+        "triangle_joshbeam.cc",
+        "triangle_trinki2_p1.cc",
+    ],
+    hdrs = [
+        "triangle.h",
+    ],
+    deps = [
+        "//:util",
+    ],
+)
+
+cc_binary(
+    name = "bench",
+    srcs = [
+        "bench.cpp",
+    ],
+    deps = [
+        ":triangle",
+        "@celero",
+    ],
+)

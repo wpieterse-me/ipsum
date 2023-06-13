@@ -12,7 +12,7 @@
 
 #include "celero/Celero.h"
 
-#include "triangle.h"
+#include "triangle/triangle.h"
 
 CELERO_MAIN
 

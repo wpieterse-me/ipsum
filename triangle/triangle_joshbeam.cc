@@ -1,5 +1,5 @@
 #include "util.h"
-#include "triangle.h"
+#include "triangle/triangle.h"
 
 struct span_t
 {
