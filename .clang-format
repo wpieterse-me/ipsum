@@ -60,7 +60,7 @@ BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeComma
 BreakInheritanceList: BeforeComma
 BreakStringLiterals: true
-ColumnLimit: 140
+ColumnLimit: 80
 CompactNamespaces: false
 ConstructorInitializerIndentWidth: 2
 Cpp11BracedListStyle: false
