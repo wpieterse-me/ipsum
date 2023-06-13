@@ -1,5 +1,5 @@
 #include "util.h"
-#include "rasterizer/triangle.h"
+#include "graphics/rasterizer/triangle.h"
 
 struct span_t
 {

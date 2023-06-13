@@ -12,7 +12,7 @@
 
 #include "celero/Celero.h"
 
-#include "rasterizer/triangle.h"
+#include "graphics/rasterizer/triangle.h"
 
 CELERO_MAIN
 
