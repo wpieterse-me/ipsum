@@ -1,27 +1,22 @@
 #include <cstdint>
 #include <iostream>
 
+#include "container.hpp"
 #include "vector.hpp"
 
 int32_t main(int32_t argument_count, char** arguments) {
-  Vector_D32_4 lhs;
+  dynamic_array_storage       storage{ sizeof(uint32_t), alignof(uint32_t) };
+  dynamic_array_view<int32_t> view{ storage };
 
-  lhs.standard_storage[0] = 1.0f;
-  lhs.standard_storage[1] = 2.0f;
-  lhs.standard_storage[2] = 3.0f;
-  lhs.standard_storage[3] = 4.0f;
+  view.push_back(int32_t{ 1 });
+  view.push_back(int32_t{ 2 });
+  view.push_back(int32_t{ 4 });
+  view.push_back(int32_t{ 8 });
+  view.push_back(int32_t{ 16 });
+  view.push_back(int32_t{ 32 });
 
-  Vector_D32_4 rhs;
-
-  rhs.standard_storage[0] = 1.0f;
-  rhs.standard_storage[1] = 2.0f;
-  rhs.standard_storage[2] = 3.0f;
-  rhs.standard_storage[3] = 4.0f;
-
-  Vector_D32_4 result = lhs + rhs;
-
-  for(auto index = 0; index < 4; index++) {
-    std::cout << result.standard_storage[index] << std::endl;
+  for(auto item: view) {
+    std::cout << item << std::endl;
   }
 
   return 0;
