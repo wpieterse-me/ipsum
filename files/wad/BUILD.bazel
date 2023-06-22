@@ -1,6 +1,29 @@
+cc_library(
+    name = "wad",
+    srcs = [
+        "wad.c",
+    ],
+    hdrs = [
+        "wad.h",
+    ],
+)
+
 filegroup(
     name = "doom1",
     srcs = [
         "doom1.wad",
+    ],
+)
+
+cc_binary(
+    name = "main",
+    srcs = [
+        "main.c",
+    ],
+    data = [
+        ":doom1",
+    ],
+    deps = [
+        ":wad",
     ],
 )
