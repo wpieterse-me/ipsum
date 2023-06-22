@@ -1,0 +1,13 @@
+cc_library(
+    name = "container",
+    hdrs = [
+        "container.hpp",
+    ],
+)
+
+cc_library(
+    name = "vector",
+    hdrs = [
+        "vector.hpp",
+    ],
+)

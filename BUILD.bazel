@@ -11,27 +11,9 @@ cc_library(
     ],
 )
 
-cc_library(
-    name = "container",
-    hdrs = [
-        "container.hpp",
-    ],
-)
-
-cc_library(
-    name = "vector",
-    hdrs = [
-        "vector.hpp",
-    ],
-)
-
 cc_binary(
     name = "main",
     srcs = [
         "main.cpp",
-    ],
-    deps = [
-        ":container",
-        ":vector",
     ],
 )
