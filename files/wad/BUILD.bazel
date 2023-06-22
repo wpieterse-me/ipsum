@@ -1,0 +1,6 @@
+filegroup(
+    name = "doom1",
+    srcs = [
+        "doom1.wad",
+    ],
+)
