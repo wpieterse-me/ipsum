@@ -4,3 +4,4 @@
 /bazel-testlogs
 
 fs/fuse/ssfs
+fs/pack/main
