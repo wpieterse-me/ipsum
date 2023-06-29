@@ -5,3 +5,4 @@
 
 fs/fuse/ssfs
 fs/pack/main
+fs/git/main
