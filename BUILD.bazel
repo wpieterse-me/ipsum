@@ -16,4 +16,7 @@ cc_binary(
     srcs = [
         "interface.c",
     ],
+    deps = [
+        ":util",
+    ],
 )

@@ -82,7 +82,7 @@ void draw_triangle_trenki2_p1(uint32_t*        image,
         int32_t b_color = (int32_t)(b.evaluate(x, y) * 255);
 
         image[x_coord * image_width + y_coord] =
-            pack_color(r_color, g_color, b_color);
+            pack_color(r_color, g_color, b_color, 255);
       }
     }
   }

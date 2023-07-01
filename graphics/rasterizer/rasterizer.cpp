@@ -42,7 +42,7 @@ void write_framebuffer(const char*     filename,
 void clear_image(uint32_t* image, int32_t image_width, int32_t image_height) {
   for(int32_t index_y = 0; index_y < image_height; index_y++) {
     for(int32_t index_x = 0; index_x < image_width; index_x++) {
-      image[index_x + index_y * image_width] = pack_color(0, 0, 0);
+      image[index_x + index_y * image_width] = pack_color(0, 0, 0, 255);
     }
   }
 }

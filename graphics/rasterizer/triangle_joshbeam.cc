@@ -59,7 +59,7 @@ static void draw_triangle_span(uint32_t* image,
     uint32_t g       = static_cast<uint32_t>(color_g * 255);
     uint32_t b       = static_cast<uint32_t>(color_b * 255);
 
-    image[x_coord * image_width + y_coord] = pack_color(r, g, b);
+    image[x_coord * image_width + y_coord] = pack_color(r, g, b, 255);
 
     factor += factor_step;
   }
