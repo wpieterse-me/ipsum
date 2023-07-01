@@ -10,3 +10,10 @@ cc_library(
         "//visibility:public",
     ],
 )
+
+cc_binary(
+    name = "interface",
+    srcs = [
+        "interface.c",
+    ],
+)
