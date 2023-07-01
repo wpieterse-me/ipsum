@@ -1,8 +1,8 @@
 COMPILER = gcc
-FILESYSTEM_FILES = ssfs.c
+FILESYSTEM_FILES = main.c
 
 build: $(FILESYSTEM_FILES)
-	$(COMPILER) $(FILESYSTEM_FILES) -o ssfs `pkg-config fuse --cflags --libs` `pkg-config physfs --cflags --libs`
+	$(COMPILER) $(FILESYSTEM_FILES) -o main `pkg-config fuse --cflags --libs` `pkg-config physfs --cflags --libs`
 
 clean:
-	rm ssfs
+	rm main
