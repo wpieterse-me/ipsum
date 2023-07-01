@@ -4,7 +4,7 @@
             "name": "Native",
             "includePath": [
                 "${workspaceFolder}/*",
-                "${workspaceFolder}/bazel-ipsum/external/celero/include/*"
+                "${workspaceFolder}/bazel-ipsum/external/celero/include/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/c++",
