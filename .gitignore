@@ -3,6 +3,6 @@
 /bazel-out
 /bazel-testlogs
 
-fs/fuse/ssfs
-fs/pack/main
-fs/git/main
+files/fuse/ssfs
+files/pack/main
+files/git/main
