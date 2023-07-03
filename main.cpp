@@ -2,6 +2,7 @@
 #include <vector>
 #include <functional>
 #include <iostream>
+#include <span>
 
 #include "util.h"
 
@@ -63,13 +64,15 @@ struct smoothing_operator {
     }
 };
 
-int32_t main(int32_t argument_count, char** arguments) {
+void do_thing() {
   noise_operator     noise{ 8.0f };
   smoothing_operator smoothing{};
 
   auto generate = std::bind(smoothing, noise);
 
   std::cout << generate() << std::endl;
+}
 
+int32_t main(int32_t argument_count, char** arguments) {
   return 0;
 }

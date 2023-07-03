@@ -20,3 +20,20 @@ cc_binary(
         ":util",
     ],
 )
+
+cc_library(
+    name = "swap",
+    hdrs = [
+        "swap.h",
+    ],
+)
+
+cc_library(
+    name = "bit_field",
+    hdrs = [
+        "bit_field.h",
+    ],
+    deps = [
+        ":swap",
+    ],
+)
