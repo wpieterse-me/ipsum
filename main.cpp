@@ -3,6 +3,7 @@
 #include <functional>
 #include <iostream>
 #include <span>
+#include <bitset>
 
 #include "util.h"
 #include "bit_field.h"
@@ -74,6 +75,34 @@ void do_thing() {
   std::cout << generate() << std::endl;
 }
 
+union generic_instruction {
+    uint32_t raw;
+
+    BitField<0, 7, uint32_t>  opcode;
+    BitField<7, 5, uint32_t>  rd;
+    BitField<12, 3, uint32_t> funct3;
+    BitField<15, 5, uint32_t> rs1;
+    BitField<20, 5, uint32_t> rs2;
+    BitField<25, 7, uint32_t> funct7;
+
+    generic_instruction()
+      : raw{ 0 } {
+    }
+
+    generic_instruction(uint32_t value)
+      : raw{ value } {
+    }
+};
+
 int32_t main(int32_t argument_count, char** arguments) {
+  generic_instruction ins{ 0b00000000101101010000010100111011 };
+
+  std::cout << std::bitset<7>{ ins.opcode.Value() } << std::endl;
+  std::cout << std::bitset<5>{ ins.rd.Value() } << std::endl;
+  std::cout << std::bitset<3>{ ins.funct3.Value() } << std::endl;
+  std::cout << std::bitset<5>{ ins.rs1.Value() } << std::endl;
+  std::cout << std::bitset<5>{ ins.rs2.Value() } << std::endl;
+  std::cout << std::bitset<7>{ ins.funct7.Value() } << std::endl;
+
   return 0;
 }
