@@ -5,6 +5,5 @@ cc_binary(
     ],
     deps = [
         "//:util",
-        "//third_party/perfetto",
     ],
 )

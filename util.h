@@ -33,6 +33,13 @@ extern "C" {
                     uint8_t*       b,
                     uint8_t*       a);
 
+  void clear_framebuffer(uint32_t* image, int32_t image_width, int32_t image_height);
+
+  void write_framebuffer(const char*     filename,
+                         const uint32_t* image,
+                         const int32_t   image_width,
+                         const int32_t   image_height);
+
 #if defined(__cplusplus)
 }
 #endif

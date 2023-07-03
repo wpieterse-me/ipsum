@@ -23,7 +23,7 @@ struct edge_equation_s {
     }
 
     bool test(float v) {
-      return (v > 0 || v == 0 && tie);
+      return (v > 0 || (v == 0 && tie));
     }
 };
 
