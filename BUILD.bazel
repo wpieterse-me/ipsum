@@ -16,4 +16,7 @@ cc_binary(
     srcs = [
         "main.cpp",
     ],
+    deps = [
+        ":util",
+    ],
 )
