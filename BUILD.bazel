@@ -20,3 +20,16 @@ cc_binary(
         ":util",
     ],
 )
+
+cc_binary(
+    name = "file",
+    srcs = [
+        "file.c",
+    ],
+    linkopts = [
+        "-luring",
+    ],
+    deps = [
+        ":util",
+    ],
+)

@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "cstdint": "cpp",
-        "physfs.h": "c"
+        "physfs.h": "c",
+        "liburing.h": "c"
     }
 }
