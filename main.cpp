@@ -5,6 +5,7 @@
 #include <span>
 
 #include "util.h"
+#include "bit_field.h"
 
 struct color_3_f {
     float r;
