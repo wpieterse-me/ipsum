@@ -8,18 +8,18 @@ cc_binary(
     ],
 )
 
-cc_binary(
-    name = "file",
-    srcs = [
-        "file.c",
-    ],
-    linkopts = [
-        "-luring",
-    ],
-    deps = [
-        "//:util",
-    ],
-)
+# cc_binary(
+#     name = "file",
+#     srcs = [
+#         "file.c",
+#     ],
+#     linkopts = [
+#         "-luring",
+#     ],
+#     deps = [
+#         "//:util",
+#     ],
+# )
 
 cc_library(
     name = "container",
