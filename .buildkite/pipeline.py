@@ -21,7 +21,13 @@ for target in targets:
 print("  - wait")
 
 for target in targets:
-    print("  - label: \":hammer: Run Bench ({})\"".format(target))
+    print("  - label: \":hammer: Run Square Root Bench ({})\"".format(target))
     print("    command: \"bazel run -c opt //:bench\"")
+    print("    agents:")
+    print("      user: \"{}\"".format(target))
+
+for target in targets:
+    print("  - label: \":hammer: Run Rasterizer Bench ({})\"".format(target))
+    print("    command: \"bazel run -c opt //graphics/rasterizer:bench\"")
     print("    agents:")
     print("      user: \"{}\"".format(target))
