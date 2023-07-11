@@ -1,1 +1,5 @@
+build --repo_env=CC=clang-15
+build --repo_env=CXX=clang++-15
+build --repo_env=LD=lld.ld-15
+
 build --cxxopt='--std=c++20'
