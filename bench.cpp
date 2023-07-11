@@ -19,14 +19,31 @@ float Q_rsqrt(float number) {
   return y;
 }
 
-class demo_simple_fixture : public celero::TestFixture { };
+class demo_simple_fixture : public celero::TestFixture {
+  public:
+    std::vector<celero::TestFixture::ExperimentValue>
+    getExperimentValues() const override {
+      std::vector<celero::TestFixture::ExperimentValue> result;
+
+      result.push_back(static_cast<int64_t>(8.0f));
+      result.push_back(static_cast<int64_t>(16.0f));
+
+      return result;
+    }
+
+    void setUp(const celero::TestFixture::ExperimentValue& value) override {
+      test_value = static_cast<float>(value.Value);
+    }
+
+    float test_value;
+};
 
 BASELINE_F(isqrt, native, demo_simple_fixture, 100, 10000000) {
-  auto result = 1.0f / sqrtf(2.0f);
+  auto result = 1.0f / sqrtf(test_value);
   celero::DoNotOptimizeAway(result != 0);
 }
 
 BENCHMARK_F(isqrt, carmack, demo_simple_fixture, 100, 10000000) {
-  auto result = Q_rsqrt(2.0f);
+  auto result = Q_rsqrt(test_value);
   celero::DoNotOptimizeAway(result != 0);
 }
