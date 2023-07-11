@@ -12,6 +12,16 @@ cc_library(
 )
 
 cc_binary(
+    name = "bench",
+    srcs = [
+        "bench.cpp",
+    ],
+    deps = [
+        "@celero",
+    ],
+)
+
+cc_binary(
     name = "main",
     srcs = [
         "main.cpp",
