@@ -13,14 +13,6 @@ targets = [
 print("steps:")
 
 for target in targets:
-    print("  - label: \":hammer: Build ({})\"".format(target))
-    print("    command: \"bazel build -c opt //...\"")
-    print("    agents:")
-    print("      user: \"{}\"".format(target))
-
-print("  - wait")
-
-for target in targets:
     print("  - label: \":hammer: Run Square Root Bench ({})\"".format(target))
     print("    command: \"bazel run -c opt //:bench\"")
     print("    agents:")
