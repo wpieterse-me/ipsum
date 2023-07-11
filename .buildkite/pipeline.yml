@@ -1,0 +1,33 @@
+steps:
+  - label: ":hammer: Execute Script (wpieterse-dt)"
+    command: "echo 'Hello, World'"
+    agents:
+      user: "wpieterse-dt"
+  - label: ":hammer: Execute Script (skyrim)"
+    command: "echo 'Hello, World'"
+    agents:
+      user: "skyrim"
+  - label: ":hammer: Execute Script (morrowind)"
+    command: "echo 'Hello, World'"
+    agents:
+      user: "morrowind"
+  - label: ":hammer: Execute Script (valenwood)"
+    command: "echo 'Hello, World'"
+    agents:
+      user: "valenwood"
+  - label: ":hammer: Execute Script (cyrodiil)"
+    command: "echo 'Hello, World'"
+    agents:
+      user: "cyrodiil"
+  - label: ":hammer: Execute Script (public-services)"
+    command: "echo 'Hello, World'"
+    agents:
+      user: "public-services"
+  - label: ":hammer: Execute Script (spare-01)"
+    command: "echo 'Hello, World'"
+    agents:
+      user: "spare-01"
+  - label: ":hammer: Execute Script (spare-02)"
+    command: "echo 'Hello, World'"
+    agents:
+      user: "spare-02"
