@@ -1,33 +1,29 @@
 steps:
-  - label: ":hammer: Execute Script (wpieterse-dt)"
-    command: "echo 'Hello, World'"
+  - label: ":hammer: Run Bench (wpieterse-dt)"
+    command: "bazel run -c opt //graphics/rasterizer:bench"
     agents:
       user: "wpieterse-dt"
-  - label: ":hammer: Execute Script (skyrim)"
-    command: "echo 'Hello, World'"
+  - label: ":hammer: Run Bench (skyrim)"
+    command: "bazel run -c opt //graphics/rasterizer:bench"
     agents:
       user: "skyrim"
-  - label: ":hammer: Execute Script (morrowind)"
-    command: "echo 'Hello, World'"
+  - label: ":hammer: Run Bench (morrowind)"
+    command: "bazel run -c opt //graphics/rasterizer:bench"
     agents:
       user: "morrowind"
-  - label: ":hammer: Execute Script (valenwood)"
-    command: "echo 'Hello, World'"
+  - label: ":hammer: Run Bench (valenwood)"
+    command: "bazel run -c opt //graphics/rasterizer:bench"
     agents:
       user: "valenwood"
-  - label: ":hammer: Execute Script (cyrodiil)"
-    command: "echo 'Hello, World'"
-    agents:
-      user: "cyrodiil"
-  - label: ":hammer: Execute Script (public-services)"
-    command: "echo 'Hello, World'"
+  - label: ":hammer: Run Bench (public-services)"
+    command: "bazel run -c opt //graphics/rasterizer:bench"
     agents:
       user: "public-services"
-  - label: ":hammer: Execute Script (spare-01)"
-    command: "echo 'Hello, World'"
+  - label: ":hammer: Run Bench (spare-01)"
+    command: "bazel run -c opt //graphics/rasterizer:bench"
     agents:
       user: "spare-01"
-  - label: ":hammer: Execute Script (spare-02)"
-    command: "echo 'Hello, World'"
+  - label: ":hammer: Run Bench (spare-02)"
+    command: "bazel run -c opt //graphics/rasterizer:bench"
     agents:
       user: "spare-02"
